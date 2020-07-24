@@ -1,0 +1,34 @@
+---
+kind: Template
+apiVersion: template.openshift.io/v1
+metadata:
+  name: add-role-to-user
+  annotations:
+    openshift.io/display-name: User and role binding Access template
+    description: RoleBinding to give access to project
+labels:
+  template: role-to-user-binding
+objects:
+- apiVersion: rbac.authorization.k8s.io/v1
+  kind: RoleBinding
+  metadata:
+    name: "${USER}_${ROLE}_role"
+  roleRef:
+    name: "${ROLE}"
+    apiGroup: rbac.authorization.k8s.io
+    kind: Role
+  subjects:
+  - kind: User
+    name: "${USER}"
+  userNames:
+  - "${USER}"
+parameters:
+- name: ROLE
+  displayName: Role
+  description: The role to bind to the user
+  required: true
+  value: edit
+- name: USER
+  displayName: User
+  description: The user to bind to the role
+  required: true
