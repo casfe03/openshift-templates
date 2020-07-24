@@ -26,7 +26,7 @@ metadata:
     samples.operator.openshift.io/managed: "true"
   name: jenkins-persistent
 objects:
-  - apiVersion: route.openshift.io/v1
+  - apiVersion: v1
     kind: Route
     metadata:
       annotations:
@@ -50,7 +50,7 @@ objects:
       resources:
         requests:
           storage: ${VOLUME_CAPACITY}
-  - apiVersion: apps.openshift.io/v1
+  - apiVersion: v1
     kind: DeploymentConfig
     metadata:
       annotations:
@@ -94,10 +94,8 @@ objects:
                   value: ${SLACK_BASE_URL}
                 - name: SLACK_ROOM
                   value: ${SLACK_ROOM}
-                - name: SLACK_TOKEN_CREDENTIAL_ID
-                  value: ${SLACK_TOKEN_CREDENTIAL_ID}
-                - name: SLACK_TEAM
-                  value: ${SLACK_TEAM}
+                - name: SLACK_TOKEN
+                  value: ${SLACK_TOKEN}
                 - name: SHARED_LIB_REPO
                   value: ${SHARED_LIB_REPO}
                 - name: SHARED_LIB_NAME
@@ -131,10 +129,8 @@ objects:
                 timeoutSeconds: 240
               resources:
                 requests:
-                  cpu: ${CPU_REQUEST}
                   memory: ${MEMORY_REQUEST}
                 limits:
-                  cpu: ${CPU_LIMIT}
                   memory: ${MEMORY_LIMIT}
               securityContext:
                 capabilities: {}
@@ -168,15 +164,13 @@ objects:
       annotations:
         serviceaccounts.openshift.io/oauth-redirectreference.jenkins: '{"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"${JENKINS_SERVICE_NAME}"}}'
       name: ${JENKINS_SERVICE_NAME}
-  - apiVersion: rbac.authorization.k8s.io/v1
+  - apiVersion: v1
     groupNames: null
     kind: RoleBinding
     metadata:
       name: ${JENKINS_SERVICE_NAME}_edit
     roleRef:
       name: edit
-      apiGroup: rbac.authorization.k8s.io
-      kind: ClusterRole
     subjects:
       - kind: ServiceAccount
         name: ${JENKINS_SERVICE_NAME}
@@ -232,14 +226,6 @@ parameters:
     displayName: Jenkins JVM Architecture
     name: JVM_ARCH
     value: i386
-  - description: Maximum amount of cpu the container can use.
-    displayName: Cpu Limit
-    name: CPU_LIMIT
-    value: "1"
-  - description: Starting request of cpu the container can use.
-    displayName: Cpu Request
-    name: CPU_REQUEST
-    value: 500m
   - description: Maximum amount of memory the container can use.
     displayName: Memory Limit
     name: MEMORY_LIMIT
@@ -279,15 +265,12 @@ parameters:
   - description: The integration point with slack
     displayName: Slack Base URL
     name: SLACK_BASE_URL
-  - description: The default slack team
-    displayName: Default Slack Team
-    name: SLACK_TEAM
   - description: The default slack channel
     displayName: Default Slack Channel
     name: SLACK_ROOM
   - description: Slack Token
-    displayName: The id of a secret that is sync'd to Jenkins that contains the token in secrettext
-    name: SLACK_TOKEN_CREDENTIAL_ID
+    displayName: Slack Token
+    name: SLACK_TOKEN
   - description: Jenkins Shared Library Repository URL
     displayName: Jenkins Shared Library Repo URL
     name: SHARED_LIB_REPO

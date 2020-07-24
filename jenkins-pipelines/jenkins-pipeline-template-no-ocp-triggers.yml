@@ -1,10 +1,10 @@
 ---
 kind: Template
-apiVersion: template.openshift.io/v1
+apiVersion: v1
 metadata:
   name: jenkins-pipeline-no-ocp-triggers
 objects:
-- apiVersion: build.openshift.io/v1
+- apiVersion: v1
   kind: BuildConfig
   metadata:
     labels:

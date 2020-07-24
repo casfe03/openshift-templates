@@ -1,28 +1,27 @@
 ---
 kind: Template
-apiVersion: template.openshift.io/v1
+apiVersion: v1
 metadata:
-  name: add-role-to-group
+  name: "add-role-to-group"
   annotations:
     openshift.io/display-name: Group and role binding Access template
     description: RoleBinding to give access to project
+    iconClass: icon-jenkins
 labels:
   template: role-to-group-binding
 objects:
-- apiVersion: rbac.authorization.k8s.io/v1
+- apiVersion: v1
   kind: RoleBinding
   metadata:
-    name: "${GROUP}_${ROLE}_role"
+    name: ${GROUP}_${ROLE}_role
   roleRef:
-    name: "${ROLE}"
-    apiGroup: rbac.authorization.k8s.io
-    kind: Role
+    name: "${ROLE}"   
   subjects:
   - kind: Group
-    name: "${GROUP}"
+    name: ${GROUP}                            
   groupNames:
   - "${GROUP}"
-parameters:
+parameters:    
 - name: ROLE
   displayName: Role
   description: The role to bind to the group

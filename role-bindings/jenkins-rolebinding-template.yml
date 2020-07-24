@@ -1,17 +1,15 @@
 ---
 kind: Template
-apiVersion: template.openshift.io/v1
+apiVersion: v1
 metadata:
   name: jenkins-rolebinding
 objects:
-- apiVersion: rbac.authorization.k8s.io/v1
+- apiVersion: v1
   kind: RoleBinding
   metadata:
     name: jenkins_pipeline_edit
   roleRef:
     name: edit
-    apiGroup: rbac.authorization.k8s.io
-    kind: ClusterRole
   subjects:
   - kind: ServiceAccount
     name: jenkins

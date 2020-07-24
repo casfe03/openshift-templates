@@ -1,6 +1,6 @@
 ---
 kind: Template
-apiVersion: template.openshift.io/v1
+apiVersion: v1
 metadata:
   name: "add-service-user-to-group"
   annotations:
@@ -10,14 +10,12 @@ metadata:
 labels:
   template: role-to-group-binding
 objects:
-- apiVersion: rbac.authorization.k8s.io/v1
+- apiVersion: v1
   kind: RoleBinding
   metadata:
     name: serviceaccount-${PIPELINES_NAMESPACE}-${DEPLOYER_USER}-edit-role
   roleRef:
     name: "${ROLE}"
-    apiGroup: rbac.authorization.k8s.io
-    kind: Role
   subjects:
   - kind: ServiceAccount
     name: "${DEPLOYER_USER}"
